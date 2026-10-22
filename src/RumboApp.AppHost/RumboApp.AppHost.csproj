@@ -1,9 +1,9 @@
 <Project Sdk="Aspire.AppHost.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\RumboApp.Identity\RumboApp.Identity.csproj" />
-    <ProjectReference Include="..\RumboApp.Location\RumboApp.Location.csproj" />
-    <ProjectReference Include="..\RumboApp.Trips\RumboApp.Trips.csproj" />
+    <ProjectReference Include="..\RumboApp.Identity\Identity.Api\Identity.Api.csproj" />
+    <ProjectReference Include="..\RumboApp.Location\Location.Api\Location.Api.csproj" />
+    <ProjectReference Include="..\RumboApp.Trips\Trips.Api\Trips.Api.csproj" />
     <ProjectReference Include="..\RumboApp.Web\RumboApp.Web.csproj" />
   </ItemGroup>
 

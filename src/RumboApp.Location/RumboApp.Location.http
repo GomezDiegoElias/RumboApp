@@ -1,6 +1,0 @@
-@RumboApp.Location_HostAddress = http://localhost:5239
-
-GET {{RumboApp.Location_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

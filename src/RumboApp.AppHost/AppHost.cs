@@ -10,15 +10,15 @@ var locationDb = postgres.AddDatabase("locationdb");
 var tripsDb    = postgres.AddDatabase("tripsdb");
 
 // Microservicios
-var identity = builder.AddProject<Projects.RumboApp_Identity>("identity")
+var identity = builder.AddProject<Projects.Identity_Api>("identity")
     .WithReference(identityDb)
     .WaitFor(identityDb);
 
-var location = builder.AddProject<Projects.RumboApp_Location>("location")
+var location = builder.AddProject<Projects.Location_Api>("location")
     .WithReference(locationDb)
     .WaitFor(locationDb);
 
-var trips = builder.AddProject<Projects.RumboApp_Trips>("trips")
+var trips = builder.AddProject<Projects.Trips_Api>("trips")
     .WithReference(tripsDb)
     .WithReference(location)   // Trips consume Location
     .WithReference(identity)   // y validan contra Identity

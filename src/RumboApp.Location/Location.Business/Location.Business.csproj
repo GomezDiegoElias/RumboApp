@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Location.Data\Location.Data.csproj" />
+    <ProjectReference Include="..\Location.Entities\Location.Entities.csproj" />
+    <ProjectReference Include="..\Location.Contracts\Location.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

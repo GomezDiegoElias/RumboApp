@@ -1,10 +1,27 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/RumboApp.AppHost/RumboApp.AppHost.csproj" />
-    <Project Path="src/RumboApp.Identity/RumboApp.Identity.csproj" />
-    <Project Path="src/RumboApp.Location/RumboApp.Location.csproj" />
     <Project Path="src/RumboApp.ServiceDefaults/RumboApp.ServiceDefaults.csproj" />
-    <Project Path="src/RumboApp.Trips/RumboApp.Trips.csproj" />
     <Project Path="src/RumboApp.Web/RumboApp.Web.csproj" />
+  </Folder>
+  <Folder Name="/src/RumboApp.Identity/">
+    <Project Path="src/RumboApp.Identity/Identity.Api/Identity.Api.csproj" />
+    <Project Path="src/RumboApp.Identity/Identity.Business/Identity.Business.csproj" />
+    <Project Path="src/RumboApp.Identity/Identity.Contracts/Identity.Contracts.csproj" />
+    <Project Path="src/RumboApp.Identity/Identity.Data/Identity.Data.csproj" />
+    <Project Path="src/RumboApp.Identity/Identity.Entities/Identity.Entities.csproj" />
+  </Folder>
+  <Folder Name="/src/RumboApp.Location/">
+    <Project Path="src/RumboApp.Location/Location.Api/Location.Api.csproj" />
+    <Project Path="src/RumboApp.Location/Location.Business/Location.Business.csproj" />
+    <Project Path="src/RumboApp.Location/Location.Contracts/Location.Contracts.csproj" />
+    <Project Path="src/RumboApp.Location/Location.Data/Location.Data.csproj" />
+    <Project Path="src/RumboApp.Location/Location.Entities/Location.Entities.csproj" />
+  </Folder>
+  <Folder Name="/src/RumboApp.Trips/">
+    <Project Path="src/RumboApp.Trips/Trips.Api/Trips.Api.csproj" />
+    <Project Path="src/RumboApp.Trips/Trips.Application/Trips.Application.csproj" />
+    <Project Path="src/RumboApp.Trips/Trips.Domain/Trips.Domain.csproj" />
+    <Project Path="src/RumboApp.Trips/Trips.Infrastructure/Trips.Infrastructure.csproj" />
   </Folder>
 </Solution>
