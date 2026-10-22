@@ -1,0 +1,24 @@
+@page "/health"
+@rendermode InteractiveServer
+@inject IIdentityApi Identity
+@inject ILocationApi Location
+@inject ITripsApi Trips
+
+<h3>Estado de los servicios</h3>
+
+<ul>
+    <li>Identity: @(_identity ? "✅" : "❌")</li>
+    <li>Location: @(_location ? "✅" : "❌")</li>
+    <li>Trips: @(_trips ? "✅" : "❌")</li>
+</ul>
+
+@code {
+    private bool _identity, _location, _trips;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _identity = await Identity.PingAsync();
+        _location = await Location.PingAsync();
+        _trips = await Trips.PingAsync();
+    }
+}

@@ -1,2 +1,10 @@
 <Solution>
+  <Folder Name="/src/">
+    <Project Path="src/RumboApp.AppHost/RumboApp.AppHost.csproj" />
+    <Project Path="src/RumboApp.Identity/RumboApp.Identity.csproj" />
+    <Project Path="src/RumboApp.Location/RumboApp.Location.csproj" />
+    <Project Path="src/RumboApp.ServiceDefaults/RumboApp.ServiceDefaults.csproj" />
+    <Project Path="src/RumboApp.Trips/RumboApp.Trips.csproj" />
+    <Project Path="src/RumboApp.Web/RumboApp.Web.csproj" />
+  </Folder>
 </Solution>

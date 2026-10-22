@@ -1,0 +1,20 @@
+<Project Sdk="Aspire.AppHost.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\RumboApp.Identity\RumboApp.Identity.csproj" />
+    <ProjectReference Include="..\RumboApp.Location\RumboApp.Location.csproj" />
+    <ProjectReference Include="..\RumboApp.Trips\RumboApp.Trips.csproj" />
+    <ProjectReference Include="..\RumboApp.Web\RumboApp.Web.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AspireUseCliBundle>true</AspireUseCliBundle>
+    <UserSecretsId>55e5b893-603f-4314-bd5a-96d23d894494</UserSecretsId>
+  </PropertyGroup>
+
+</Project>
