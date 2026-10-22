@@ -24,4 +24,7 @@
     <Project Path="src/RumboApp.Trips/Trips.Domain/Trips.Domain.csproj" />
     <Project Path="src/RumboApp.Trips/Trips.Infrastructure/Trips.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/RumboApp.Trips.Domain.Tests/RumboApp.Trips.Domain.Tests.csproj" />
+  </Folder>
 </Solution>
