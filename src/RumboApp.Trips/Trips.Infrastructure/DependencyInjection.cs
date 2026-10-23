@@ -33,6 +33,7 @@ public static class DependencyInjection
         builder.Services.AddSingleton(typeof(FarePolicy), serviceProvider =>
             serviceProvider.GetRequiredService<IOptions<FarePolicyOptions>>().Value.ToDomain());
         builder.Services.AddScoped<ITripRepository, EfTripRepository>();
+        builder.Services.AddScoped<IDriverCommitmentRepository, EfDriverCommitmentRepository>();
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
         return builder;
     }

@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
 using RumboApp.Trips.Domain;
 using RumboApp.Trips.Infrastructure.Data;
 using RumboApp.Trips.Infrastructure.Repositories;
@@ -73,18 +72,27 @@ public sealed class EfTripRepositoryTests : IAsyncLifetime
         var start = new DateTimeOffset(2026, 10, 23, 12, 0, 0, TimeSpan.Zero);
         var end = start.AddHours(1);
 
-        await _dbContext.Database.ExecuteSqlInterpolatedAsync($"""
-            INSERT INTO driver_commitments ("Id", "DriverId", "TripId", "Period")
-            VALUES ({Guid.NewGuid()}, {driverId}, {firstTripId}, tstzrange({start}, {end}, '[)'));
-            """);
+        var repository = new EfDriverCommitmentRepository(_dbContext);
+        var unitOfWork = new UnitOfWork(_dbContext);
 
-        var exception = await Assert.ThrowsAsync<PostgresException>(() =>
-            _dbContext.Database.ExecuteSqlInterpolatedAsync($"""
-                INSERT INTO driver_commitments ("Id", "DriverId", "TripId", "Period")
-                VALUES ({Guid.NewGuid()}, {driverId}, {secondTripId},
-                        tstzrange({start.AddMinutes(30)}, {end.AddMinutes(30)}, '[)'));
-                """));
+        await repository.AddAsync(new DriverCommitment(
+            driverId,
+            firstTripId,
+            start,
+            end));
+        await unitOfWork.SaveChangesAsync();
 
-        Assert.Equal("23P01", exception.SqlState);
+        await repository.AddAsync(new DriverCommitment(
+            driverId,
+            secondTripId,
+            start.AddMinutes(30),
+            end.AddMinutes(30)));
+
+        var exception = await Assert.ThrowsAsync<DriverNotAvailableException>(
+            () => unitOfWork.SaveChangesAsync());
+
+        Assert.Equal(
+            "El chofer no está disponible para el intervalo solicitado.",
+            exception.Message);
     }
 }

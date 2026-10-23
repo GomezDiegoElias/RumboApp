@@ -1,6 +1,6 @@
 # M4 — Trips.Infrastructure
 
-**Estado:** primera iteración implementada: `TripsDbContext`, `EfTripRepository`, `IUnitOfWork`, persistencia base de `driver_commitments` con restricción `EXCLUDE`, composición de persistencia, validación de `FarePolicyOptions`, migraciones versionadas y pruebas de integración con PostgreSQL real en contenedor.
+**Estado:** primera iteración implementada: `TripsDbContext`, `EfTripRepository`, `IUnitOfWork`, repositorio de `driver_commitments` con traducción de conflictos, persistencia base con restricción `EXCLUDE`, composición de persistencia, validación de `FarePolicyOptions`, migraciones versionadas y pruebas con PostgreSQL real en contenedor.
 **Alcance:** PostgreSQL, EF Core/SQL donde corresponda, migraciones, repositorios, unidad de trabajo, `driver_commitments`, adaptadores reales/falsos y cliente hacia Location.
 **Requisitos:** REQ-B2-02..03, REQ-B6-01..02, REQ-B-02..04.  
 **Dependencias:** M2, M3 y M11.
@@ -31,3 +31,8 @@ Los repositorios solo agregan o consultan entidades dentro del contexto. La
 confirmación se realiza mediante `IUnitOfWork`, que la aplicación invoca al
 finalizar cada caso de uso. Así, una futura asignación podrá actualizar el viaje
 y su compromiso de chofer dentro de la misma unidad de persistencia.
+
+`IDriverCommitmentRepository` convierte el compromiso de dominio a un intervalo
+`tstzrange`. Si PostgreSQL rechaza el insert por `no_overlap` (`23P01`), el
+`UnitOfWork` lo traduce a `DriverNotAvailableException`; otros errores de
+persistencia se propagan sin ocultarse.
