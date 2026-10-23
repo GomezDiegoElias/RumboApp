@@ -26,7 +26,7 @@ public sealed class EfTripRepositoryTests : IAsyncLifetime
             .Options;
 
         _dbContext = new TripsDbContext(options);
-        await _dbContext.Database.EnsureCreatedAsync();
+        await _dbContext.Database.MigrateAsync();
     }
 
     public async Task DisposeAsync()

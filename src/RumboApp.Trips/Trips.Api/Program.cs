@@ -21,6 +21,8 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+await app.ApplyTripsMigrationsAsync();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
 using RumboApp.Trips.Domain.Ports;
 using RumboApp.Trips.Domain;
 using RumboApp.Trips.Infrastructure.Configuration;
@@ -11,6 +12,15 @@ namespace RumboApp.Trips.Infrastructure;
 
 public static class DependencyInjection
 {
+    public static async Task ApplyTripsMigrationsAsync(
+        this IHost app,
+        CancellationToken cancellationToken = default)
+    {
+        await using var scope = app.Services.CreateAsyncScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<TripsDbContext>();
+        await dbContext.Database.MigrateAsync(cancellationToken);
+    }
+
     public static IHostApplicationBuilder AddTripsPersistence(
         this IHostApplicationBuilder builder)
     {
