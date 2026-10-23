@@ -10,6 +10,8 @@ Esta versión documenta el núcleo implementado en `Trips.Domain`. La persistenc
 | `TripState` | Estados del viaje | las transiciones se validan en `TripStateMachine` |
 | `Money` | Importes exactos | centavos no negativos, moneda ISO de tres letras mayúsculas |
 | `GeoPoint` | Coordenada geográfica | latitud [-90, 90], longitud [-180, 180], valores finitos |
+| `FarePolicy` | Parámetros de tarifa | todos los importes usan la misma moneda |
+| `FareCalculator` | Cálculo estimado/final | misma función, centavos enteros, distancia/tiempo no negativos |
 
 ## Estados
 
@@ -44,4 +46,5 @@ Los estados terminales son `Completed`, `CancelledByPassenger`, `CancelledByDriv
 - Los errores de dominio se expresan como `DomainException`; su traducción a HTTP corresponde a la capa API.
 - El tiempo de viajes programados se recibe explícitamente para que los tests no dependan del reloj del sistema.
 - El dinero se representa en centavos enteros, nunca con `float` o `double`.
-
+- La política de tarifa recibe sus parámetros; todavía no fija valores comerciales.
+- Distancias y duraciones parciales se redondean hacia arriba a kilómetros y minutos para el cálculo en centavos. Esta regla debe quedar confirmada en el ADR de tarifas si la cátedra o el equipo exige otra semántica.

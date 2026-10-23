@@ -100,4 +100,41 @@ public sealed class TripTests
 
         Assert.Equal("La moneda debe ser un código de tres letras.", exception.Message);
     }
+
+    [Fact]
+    public void Fare_calculation_uses_the_same_policy_for_estimation_and_final_amount()
+    {
+        var policy = new FarePolicy(
+            new Money(500),
+            new Money(100),
+            new Money(50));
+
+        var estimated = FareCalculator.Calculate(policy, 1_001, 61);
+        var final = FareCalculator.Calculate(policy, 1_001, 61);
+
+        Assert.Equal(new Money(800), estimated);
+        Assert.Equal(estimated, final);
+    }
+
+    [Fact]
+    public void Fare_calculation_rounds_partial_distance_and_time_up()
+    {
+        var policy = new FarePolicy(
+            new Money(500),
+            new Money(100),
+            new Money(50));
+
+        var fare = FareCalculator.Calculate(policy, 1, 1);
+
+        Assert.Equal(new Money(650), fare);
+    }
+
+    [Fact]
+    public void Fare_calculation_rejects_negative_inputs()
+    {
+        var exception = Assert.Throws<DomainException>(() =>
+            FareCalculator.Calculate(new FarePolicy(new Money(500), new Money(100), new Money(50)), -1, 0));
+
+        Assert.Equal("La distancia no puede ser negativa.", exception.Message);
+    }
 }
