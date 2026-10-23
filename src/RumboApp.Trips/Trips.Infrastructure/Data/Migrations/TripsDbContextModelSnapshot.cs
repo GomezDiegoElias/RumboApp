@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using NpgsqlTypes;
 using RumboApp.Trips.Infrastructure.Data;
 
 #nullable disable
@@ -21,6 +22,30 @@ namespace Trips.Infrastructure.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("RumboApp.Trips.Infrastructure.Data.DriverCommitmentRow", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("DriverId")
+                        .HasColumnType("uuid");
+
+                    b.Property<NpgsqlRange<DateTimeOffset>>("Period")
+                        .HasColumnType("tstzrange");
+
+                    b.Property<Guid>("TripId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DriverId");
+
+                    b.HasIndex("TripId");
+
+                    b.ToTable("driver_commitments", (string)null);
+                });
 
             modelBuilder.Entity("RumboApp.Trips.Infrastructure.Data.TripRow", b =>
                 {

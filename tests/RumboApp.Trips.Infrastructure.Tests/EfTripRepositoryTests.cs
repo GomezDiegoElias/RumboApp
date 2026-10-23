@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using RumboApp.Trips.Domain;
 using RumboApp.Trips.Infrastructure.Data;
 using RumboApp.Trips.Infrastructure.Repositories;
@@ -61,5 +62,29 @@ public sealed class EfTripRepositoryTests : IAsyncLifetime
         Assert.Equal(TripState.Scheduled, stored.State);
         Assert.Equal(trip.ScheduledAt, stored.ScheduledAt);
         Assert.Equal(trip.EstimatedFare, stored.EstimatedFare);
+    }
+
+    [Fact]
+    public async Task Driver_commitments_reject_overlapping_periods_for_same_driver()
+    {
+        var driverId = Guid.Parse("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb");
+        var firstTripId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+        var secondTripId = Guid.Parse("22222222-2222-2222-2222-222222222222");
+        var start = new DateTimeOffset(2026, 10, 23, 12, 0, 0, TimeSpan.Zero);
+        var end = start.AddHours(1);
+
+        await _dbContext.Database.ExecuteSqlInterpolatedAsync($"""
+            INSERT INTO driver_commitments ("Id", "DriverId", "TripId", "Period")
+            VALUES ({Guid.NewGuid()}, {driverId}, {firstTripId}, tstzrange({start}, {end}, '[)'));
+            """);
+
+        var exception = await Assert.ThrowsAsync<PostgresException>(() =>
+            _dbContext.Database.ExecuteSqlInterpolatedAsync($"""
+                INSERT INTO driver_commitments ("Id", "DriverId", "TripId", "Period")
+                VALUES ({Guid.NewGuid()}, {driverId}, {secondTripId},
+                        tstzrange({start.AddMinutes(30)}, {end.AddMinutes(30)}, '[)'));
+                """));
+
+        Assert.Equal("23P01", exception.SqlState);
     }
 }
