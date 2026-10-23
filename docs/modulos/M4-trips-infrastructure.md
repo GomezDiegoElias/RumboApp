@@ -1,6 +1,6 @@
 # M4 — Trips.Infrastructure
 
-**Estado:** primera iteración implementada: `TripsDbContext`, `EfTripRepository`, composición de persistencia y validación de `FarePolicyOptions`.
+**Estado:** primera iteración implementada: `TripsDbContext`, `EfTripRepository`, composición de persistencia, validación de `FarePolicyOptions` y una prueba de integración con PostgreSQL real en contenedor.
 **Alcance:** PostgreSQL, EF Core/SQL donde corresponda, migraciones, repositorios, unidad de trabajo, `driver_commitments`, adaptadores reales/falsos y cliente hacia Location.
 **Requisitos:** REQ-B2-02..03, REQ-B6-01..02, REQ-B-02..04.  
 **Dependencias:** M2, M3 y M11.
