@@ -1,6 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using RumboApp.Trips.Domain.Ports;
+using RumboApp.Trips.Domain;
+using RumboApp.Trips.Infrastructure.Configuration;
 using RumboApp.Trips.Infrastructure.Data;
 using RumboApp.Trips.Infrastructure.Repositories;
 
@@ -12,6 +15,13 @@ public static class DependencyInjection
         this IHostApplicationBuilder builder)
     {
         builder.AddNpgsqlDbContext<TripsDbContext>("tripsdb");
+        builder.Services
+            .AddOptions<FarePolicyOptions>()
+            .BindConfiguration("Trips:Fare")
+            .ValidateOnStart();
+        builder.Services.AddSingleton<IValidateOptions<FarePolicyOptions>, FarePolicyOptionsValidator>();
+        builder.Services.AddSingleton(typeof(FarePolicy), serviceProvider =>
+            serviceProvider.GetRequiredService<IOptions<FarePolicyOptions>>().Value.ToDomain());
         builder.Services.AddScoped<ITripRepository, EfTripRepository>();
         return builder;
     }
