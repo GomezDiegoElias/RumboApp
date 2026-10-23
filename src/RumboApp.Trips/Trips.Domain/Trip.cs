@@ -70,6 +70,26 @@ public sealed class Trip
         return new(id ?? Guid.NewGuid(), passengerId, origin, destination, TripState.Scheduled, scheduledAt, estimatedFare);
     }
 
+    public static Trip Rehydrate(
+        Guid id,
+        Guid passengerId,
+        GeoPoint origin,
+        GeoPoint destination,
+        TripState state,
+        DateTimeOffset? scheduledAt,
+        Money estimatedFare,
+        Guid? driverId,
+        Money? finalFare)
+    {
+        var trip = new Trip(id, passengerId, origin, destination, state, scheduledAt, estimatedFare)
+        {
+            DriverId = driverId,
+            FinalFare = finalFare
+        };
+
+        return trip;
+    }
+
     public void AssignDriver(Guid driverId)
     {
         if (driverId == Guid.Empty)
