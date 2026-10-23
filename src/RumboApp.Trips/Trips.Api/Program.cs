@@ -1,11 +1,11 @@
 using RumboApp.Trips.Clients;
-using RumboApp.Trips.Data;
+using RumboApp.Trips.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-builder.AddNpgsqlDbContext<TripsDbContext>("tripsdb");
+builder.AddTripsPersistence();
 
 builder.Services.AddHttpClient<ILocationApi, LocationApi>(client =>
 {
