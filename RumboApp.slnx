@@ -27,5 +27,6 @@
   <Folder Name="/tests/">
     <Project Path="tests/RumboApp.Trips.Application.Tests/RumboApp.Trips.Application.Tests.csproj" />
     <Project Path="tests/RumboApp.Trips.Domain.Tests/RumboApp.Trips.Domain.Tests.csproj" />
+    <Project Path="tests/RumboApp.Trips.Infrastructure.Tests/RumboApp.Trips.Infrastructure.Tests.csproj" />
   </Folder>
 </Solution>
