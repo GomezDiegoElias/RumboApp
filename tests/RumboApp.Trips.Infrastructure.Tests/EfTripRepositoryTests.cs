@@ -39,6 +39,7 @@ public sealed class EfTripRepositoryTests : IAsyncLifetime
     public async Task Repository_persists_and_rehydrates_a_trip()
     {
         var repository = new EfTripRepository(_dbContext);
+        var unitOfWork = new UnitOfWork(_dbContext);
         var trip = Trip.Schedule(
             Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
             new GeoPoint(-27.4516, -58.9867),
@@ -49,6 +50,7 @@ public sealed class EfTripRepositoryTests : IAsyncLifetime
             Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc"));
 
         await repository.AddAsync(trip);
+        await unitOfWork.SaveChangesAsync();
         var stored = await repository.GetByIdAsync(trip.Id);
 
         Assert.NotNull(stored);

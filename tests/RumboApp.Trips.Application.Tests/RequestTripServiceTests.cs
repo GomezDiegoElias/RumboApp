@@ -17,6 +17,7 @@ public sealed class RequestTripServiceTests
         var repository = new InMemoryTripRepository();
         var service = new RequestTripService(
             repository,
+            new InMemoryUnitOfWork(),
             new FarePolicy(new Money(500), new Money(100), new Money(50)));
 
         var trip = await service.ExecuteAsync(new RequestTripCommand(
@@ -29,6 +30,12 @@ public sealed class RequestTripServiceTests
         Assert.Same(trip, repository.SavedTrip);
         Assert.Equal(TripState.Requested, trip.State);
         Assert.Equal(new Money(800), trip.EstimatedFare);
+    }
+
+    private sealed class InMemoryUnitOfWork : IUnitOfWork
+    {
+        public Task SaveChangesAsync(CancellationToken cancellationToken = default) =>
+            Task.CompletedTask;
     }
 
     private sealed class InMemoryTripRepository : ITripRepository

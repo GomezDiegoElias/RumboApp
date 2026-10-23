@@ -1,6 +1,6 @@
 # M4 — Trips.Infrastructure
 
-**Estado:** primera iteración implementada: `TripsDbContext`, `EfTripRepository`, composición de persistencia, validación de `FarePolicyOptions`, migración inicial versionada y una prueba de integración con PostgreSQL real en contenedor.
+**Estado:** primera iteración implementada: `TripsDbContext`, `EfTripRepository`, `IUnitOfWork`, composición de persistencia, validación de `FarePolicyOptions`, migración inicial versionada y una prueba de integración con PostgreSQL real en contenedor.
 **Alcance:** PostgreSQL, EF Core/SQL donde corresponda, migraciones, repositorios, unidad de trabajo, `driver_commitments`, adaptadores reales/falsos y cliente hacia Location.
 **Requisitos:** REQ-B2-02..03, REQ-B6-01..02, REQ-B-02..04.  
 **Dependencias:** M2, M3 y M11.
@@ -26,3 +26,8 @@ dotnet ef migrations add <Nombre> `
   --startup-project src\RumboApp.Trips\Trips.Infrastructure\Trips.Infrastructure.csproj `
   --output-dir Data\Migrations
 ```
+
+Los repositorios solo agregan o consultan entidades dentro del contexto. La
+confirmación se realiza mediante `IUnitOfWork`, que la aplicación invoca al
+finalizar cada caso de uso. Así, una futura asignación podrá actualizar el viaje
+y su compromiso de chofer dentro de la misma unidad de persistencia.

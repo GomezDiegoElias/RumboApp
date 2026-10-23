@@ -5,6 +5,7 @@ namespace RumboApp.Trips.Application;
 
 public sealed class RequestTripService(
     ITripRepository tripRepository,
+    IUnitOfWork unitOfWork,
     FarePolicy farePolicy)
 {
     public async Task<Trip> ExecuteAsync(
@@ -23,6 +24,7 @@ public sealed class RequestTripService(
             estimatedFare);
 
         await tripRepository.AddAsync(trip, cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
         return trip;
     }
 }

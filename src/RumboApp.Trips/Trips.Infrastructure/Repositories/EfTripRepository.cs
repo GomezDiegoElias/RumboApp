@@ -18,12 +18,12 @@ public sealed class EfTripRepository(TripsDbContext dbContext) : ITripRepository
         return row is null ? null : ToDomain(row);
     }
 
-    public async Task AddAsync(
+    public Task AddAsync(
         Trip trip,
         CancellationToken cancellationToken = default)
     {
         dbContext.Trips.Add(ToRow(trip));
-        await dbContext.SaveChangesAsync(cancellationToken);
+        return Task.CompletedTask;
     }
 
     private static TripRow ToRow(Trip trip) =>
