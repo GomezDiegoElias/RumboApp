@@ -7,7 +7,7 @@
 
 **Tareas:** registrar ADR de persistencia; crear restricción EXCLUDE y traducir `23P01`; implementar `FOR UPDATE SKIP LOCKED`; composición única; Testcontainers/Aspire Testing; estado conocido por prueba.  
 **Aceptación:** asignación e inmediatos/programados no generan solapamientos; los adaptadores se cambian desde composición; migraciones son reproducibles.  
-**Tests:** integración con PostgreSQL real, 50+ aceptaciones, cancelación concurrente, programado vs. inmediato y scheduler.
+**Tests:** integración con PostgreSQL real, 50 aceptaciones concurrentes sobre un mismo intervalo, cancelación concurrente, programado vs. inmediato y scheduler.
 
 ## Estrategia de esquema
 

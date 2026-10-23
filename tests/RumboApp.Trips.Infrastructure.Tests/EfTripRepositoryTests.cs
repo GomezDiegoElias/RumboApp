@@ -95,4 +95,60 @@ public sealed class EfTripRepositoryTests : IAsyncLifetime
             "El chofer no está disponible para el intervalo solicitado.",
             exception.Message);
     }
+
+    [Fact]
+    public async Task Concurrent_commitments_allow_exactly_one_overlapping_assignment()
+    {
+        var driverId = Guid.Parse("dddddddd-dddd-dddd-dddd-dddddddddddd");
+        var start = new DateTimeOffset(2026, 10, 24, 12, 0, 0, TimeSpan.Zero);
+        var end = start.AddHours(1);
+
+        var attempts = Enumerable.Range(1, 50)
+            .Select(index => TryAddCommitmentAsync(
+                driverId,
+                Guid.Parse($"{index:D8}-1111-1111-1111-111111111111"),
+                start,
+                end));
+
+        var results = await Task.WhenAll(attempts);
+
+        Assert.Equal(1, results.Count(result => result));
+        Assert.Equal(49, results.Count(result => !result));
+    }
+
+    private async Task<bool> TryAddCommitmentAsync(
+        Guid driverId,
+        Guid tripId,
+        DateTimeOffset startsAt,
+        DateTimeOffset endsAt)
+    {
+        await using var dbContext = CreateDbContext();
+        var repository = new EfDriverCommitmentRepository(dbContext);
+        var unitOfWork = new UnitOfWork(dbContext);
+
+        await repository.AddAsync(new DriverCommitment(
+            driverId,
+            tripId,
+            startsAt,
+            endsAt));
+
+        try
+        {
+            await unitOfWork.SaveChangesAsync();
+            return true;
+        }
+        catch (DriverNotAvailableException)
+        {
+            return false;
+        }
+    }
+
+    private TripsDbContext CreateDbContext()
+    {
+        var options = new DbContextOptionsBuilder<TripsDbContext>()
+            .UseNpgsql(_postgres.GetConnectionString())
+            .Options;
+
+        return new TripsDbContext(options);
+    }
 }
